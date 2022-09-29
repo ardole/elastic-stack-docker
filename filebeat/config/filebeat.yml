@@ -1,0 +1,30 @@
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - config:
+            - type: docker
+              containers.ids:
+                - "${data.docker.container.id}"
+              fields:
+                tags: [ "training" ]
+              fields_under_root: true
+              encoding: "UTF-8"
+              multiline:
+                type: pattern
+                pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}|^\[ACCESS\]'
+                negate: true
+                match: after
+
+processors:
+- add_cloud_metadata: {}
+- add_host_metadata: {}
+
+output.logstash:
+  hosts: 'logstash:5000'
+  proxy_disable: true
