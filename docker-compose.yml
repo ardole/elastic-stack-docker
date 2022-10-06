@@ -32,7 +32,7 @@ services:
         ELK_VERSION: $ELK_VERSION
     user: root
     volumes:
-      - "/root/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
+      - "/tmp/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
@@ -48,7 +48,7 @@ services:
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
-      - "/root/logstash.yml:/usr/share/logstash/logstash.yml:ro"
+      - "/tmp/logstash.yml:/usr/share/logstash/logstash.yml:ro"
       - type: bind
         source: ./logstash/pipeline
         target: /usr/share/logstash/pipeline
